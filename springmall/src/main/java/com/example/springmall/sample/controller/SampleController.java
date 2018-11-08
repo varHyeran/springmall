@@ -18,7 +18,12 @@ public class SampleController {
 	@Autowired
 	private SampleService sampleService;
 	
-	// 4-1. 수정 폼
+	/*
+	 * 4-1. 수정 폼
+	 * @method	modifySample
+     * @why		sampleNo에 해당하는 회원정보를 가져와 model객체에 데이터를 넘기고 view로 포워드
+     * @param	Model model, int sampleNo
+     */
 	@RequestMapping(value="/sample/modifySample", method=RequestMethod.GET)
 	public String modifySample(Model model, @RequestParam(value="sampleNo") int sampleNo) {	
 		System.out.println("SampleController.modifySample() 수정 폼");
@@ -27,7 +32,12 @@ public class SampleController {
 		return "/sample/modifySample";	
 	}
 	
-	// 4-2. 수정 액션
+	/*
+	 * 4-2. 수정 액션
+	 * @method	modifySample
+     * @why		sample vo를 매개변수로 보내 수정처리 후 리다이렉트
+     * @param	Sample sample
+     */
 	@RequestMapping(value="/sample/modifySample", method=RequestMethod.POST)
 	public String modifySample(Sample sample) {
 		System.out.println("SampleController.modifySample() 수정 액션");
@@ -35,24 +45,37 @@ public class SampleController {
 		return "redirect:/sample/sampleList";
 	}
 	
-	// 3-1. 입력 폼
+	/*
+	 * 3-1. 입력 폼
+	 * @method	addSample
+     * @why		회원가입 폼 보여주기
+     */
 	@RequestMapping(value="/sample/addSample", method=RequestMethod.GET)
 	public String addSample() {
 		System.out.println("SampleController.addSample() 입력 폼");
 		return "/sample/addSample";
-		// jquery, bootstrap, Sample command객체
 	}
 	
-	// 3-2. 입력 액션
+	/*
+	 * 3-2. 입력 액션
+	 * @method	addSample
+     * @why		sample vo를 매개변수로 보내 입력처리 후 리다이렉트
+     * @param	Sample sample
+     */
 	@RequestMapping(value="/sample/addSample", method=RequestMethod.POST)
 	public String addSample(Sample sample) {	// command 객체. vo.sample 데이터부분에 변수명과 input name이 같아야한다	// Sample의 친구들이 존재할 수 있다
-		// command객체의 멤버변수 == input태그 name속성, 표준setter
+		// command객체의 멤버변수 == input태그 name속성, 표준setter로 존재
 		System.out.println("SampleController.addSample() 입력 액션");
 		sampleService.addSample(sample);
 		return "redirect:/sample/sampleList";
 	}
 	
-	// 2. 삭제
+	/*
+	 * 2. 삭제
+	 * @method	removeSample
+     * @why		sampleNo에 해당하는 데이터를 삭제하고 리다이렉트
+     * @param	int sampleNo 
+     */
 	@RequestMapping(value="/sample/removeSample", method=RequestMethod.GET)
 	public String removeSample(@RequestParam(value="sampleNo") int sampleNo) {	// 스프링은 매개변수 타입을 모두 자기가 바꾼다
 		System.out.println("SampleController.removeSample()");
@@ -60,7 +83,12 @@ public class SampleController {
 		return "redirect:/sample/sampleList";	// redirect라는 문자열이 있으면 view가 아니다(없으면 view의 이름이라고 생각)
 	}
 	
-	// 1. 샘플 목록
+	/*
+	 * 1. 샘플 목록
+	 * @method	sampleList
+     * @why		currentPage를 매개변수로 보내고 데이터를 매핑해와 model객체에 데이터를 넘기고 리스트를 보여주는 view로 포워드
+     * @param	Model model, int currentPage
+     */
 	@RequestMapping(value="/sample/sampleList", method=RequestMethod.GET)
 	public String sampleList(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage) {	// Model model = new Model();
 		System.out.println("SampleController.sampleList()");

@@ -9,7 +9,7 @@ import com.example.springmall.sample.vo.Sample;
 
 @Mapper
 public interface SampleMapper {	// 추상메서드, 추상클래스, 인터페이스		// 완전하게 순수한 추상메서드는 굳이 클래스로 만들필요가 없다. 인터페이스로 만듦
-	// 1. select all
+	// 1. select all, 전체행
 	List<Sample> selectSampleAll(HashMap<String, Object> map);	// public, abstract
 	int selectSampleAllCount();
 	// 2. delete

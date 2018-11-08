@@ -9,11 +9,11 @@
 	}
  -->
 <mapper namespace="com.example.springmall.sample.mapper.SampleMapper">
-	<!-- 전체회원조회 -->
+	<!-- 전체회원조회(페이징) -->
 	    <select id="selectSampleAll" resultType="map">
 	        SELECT no as sampleNo, id as sampleId, pw as samplePw FROM sample ORDER BY no LIMIT #{startRow}, #{rowPerPage}
 	    </select>
-	<!-- sampleList 페이징 -->
+	<!-- 전체행 -->
 	    <select id="selectSampleAllCount" resultType="int">
 	        SELECT COUNT(*) FROM sample
 	    </select>    

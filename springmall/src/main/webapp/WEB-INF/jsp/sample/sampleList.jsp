@@ -38,11 +38,11 @@
 		</tbody>
 	</table>
 		<div class="form-group text-center">
-			<c:if test="${currentPage > 1}">
+			<c:if test="${currentPage > 1}">	<!-- 현재페이지가 1보다 크다면 이전버튼 생성 -->
 				<a href="${pageContext.request.contextPath}/sample/sampleList?currentPage=${currentPage-1}" class="btn btn-info">이전</a>
 			</c:if>
-			<c:if test="${currentPage < lastPage}">
-				<a href="${pageContext.request.contextPath}/sample/sampleList?currentPage=${currentPage+1}" class="btn btn-info" align="center">다음</a>
+			<c:if test="${currentPage < lastPage}">		<!-- 현재페이지가 마지막페이지보다 작다면 다음버튼 생성 -->
+				<a href="${pageContext.request.contextPath}/sample/sampleList?currentPage=${currentPage+1}" class="btn btn-info">다음</a>
 			</c:if>
 		</div>
 </body>

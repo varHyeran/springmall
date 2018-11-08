@@ -8,10 +8,31 @@
 <!-- bootstrap CDN -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <!-- jquery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(()=>{
+        $('#samplePw').focus();
+        $('#samplePw').blur(()=>{
+            if($('#samplePw').val().length < 1){
+                $('#pwHelper').text('비밀번호를 입력하세요');
+                $('#samplePw').focus();
+            }else{
+                $('#pwHelper').text('');
+            }
+        });
+        $('#submitBtn').click(()=>{
+            if($('#samplePw').val().length == 0){
+            	alert('비밀번호를 입력하세요');
+            }else{
+                $('#modifySampleForm').submit();
+            }
+        });
+    });
+</script>
 </head>
 <body>
 	<h1>modifySample</h1>
-		<form action="/sample/modifySample" method="post">
+		<form action="/sample/modifySample" method="post" id="modifySampleForm">
 			<table>
 				<tr>
 					<th>NO</th>
@@ -23,8 +44,8 @@
 				</tr>
 				<tr>
 					<th>PW</tj>
-					<td><input type="password" name="samplePw" class="form-control"></td>
-					<td><button type="submit" class="btn btn-primary" class="btn btn-primary">수정</button></td>
+					<td><input type="password" id="samplePw" name="samplePw" class="form-control"><span id="pwHelper"></span></td>
+					<td><button type="submit" id="submitBtn" class="btn btn-primary" class="btn btn-primary">수정</button></td>
 				</tr>
 			</table>
 		</form>
