@@ -10,7 +10,10 @@
 <!-- jquery CDN -->
 </head>
 <body>
-	<h1>sampleList</h1>
+	<h1 align="center">sampleList</h1>
+	    <a href="/sample/addSample">
+            <button type="button" class="btn btn-danger">회원가입</button>
+        </a>
 	<table class="table">
 		<thead>
 			<tr>
@@ -34,5 +37,13 @@
 			</c:forEach>
 		</tbody>
 	</table>
+		<div class="form-group text-center">
+			<c:if test="${currentPage > 1}">
+				<a href="${pageContext.request.contextPath}/sample/sampleList?currentPage=${currentPage-1}" class="btn btn-info">이전</a>
+			</c:if>
+			<c:if test="${currentPage < lastPage}">
+				<a href="${pageContext.request.contextPath}/sample/sampleList?currentPage=${currentPage+1}" class="btn btn-info" align="center">다음</a>
+			</c:if>
+		</div>
 </body>
 </html>
