@@ -33,4 +33,8 @@
 	    <update id="updateSample" parameterType="com.example.springmall.sample.vo.Sample">
 			UPDATE sample SET pw = #{samplePw} WHERE no = #{sampleNo}
 	    </update>
+	<!-- 검색 -->
+		<select id="selectSearch" resultType="map">
+			SELECT no as sampleNo, id as sampleId, pw as samplePw FROM sample WHERE no = #{sampleNo} OR id = #{sampleId}
+		</select>
 </mapper>

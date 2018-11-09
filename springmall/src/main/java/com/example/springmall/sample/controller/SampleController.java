@@ -18,6 +18,15 @@ public class SampleController {
 	@Autowired
 	private SampleService sampleService;
 	
+	@RequestMapping(value="/sample/sampleList", method=RequestMethod.POST)
+	public String searchSample(Model model, @RequestParam(value="category") Sample sample, @RequestParam(value="search") String search) {
+		System.out.println("SampleController.searchSample()");
+		HashMap<String, Object> searchMap = new HashMap<String, Object>();
+        searhMap.put("sampleNo", sampleNo);
+		sampleService.searchSample(sample, search);
+		return search;
+	}
+	
 	/*
 	 * 4-1. 수정 폼
 	 * @method	modifySample
@@ -98,6 +107,8 @@ public class SampleController {
         model.addAttribute("sampleList", sampleList);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("lastPage", (int)map.get("lastPage"));
+        model.addAttribute("startPage", map.get("startPage"));
+        model.addAttribute("endPage", map.get("endPage"));
 		return "/sample/sampleList";
 	}
 }

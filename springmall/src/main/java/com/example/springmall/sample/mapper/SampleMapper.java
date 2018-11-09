@@ -20,4 +20,6 @@ public interface SampleMapper {	// 추상메서드, 추상클래스, 인터페�
 	public abstract Sample selectOne(int sampleNo);
 	// 5. update
 	int updateSample(Sample sample);
+	// 6. search
+	int selectSearch(Sample sample, String search);
 }

@@ -16,6 +16,13 @@ import com.example.springmall.sample.vo.Sample;
 public class SampleService {
 	@Autowired	// 의존관계를 자동설정할 때 사용
 	private SampleMapper sampleMapper;
+	
+	public Sample searchSample(Sample sample, String search) {
+		System.out.println("SampleService.searchSample()");
+		return sampleMapper.selectSearch(sample, search);
+		
+	}
+	
 	/*
 	 * 4-1 수정 화면
 	 * @method	getSample
@@ -77,6 +84,14 @@ public class SampleService {
 		if(totalCount % rowPerPage != 0) {	// 전체행을 페이지당 행으로 나눴을 때 나머지가 0이 아니면 lastPage를 1더해준다.
 			lastPage++;
 		}
+		int pageBlock = 5;	// 한블럭당 5페이지씩
+		int startPage = (((int)map.get("currentPage")-1)/pageBlock)*pageBlock+1;	// 시작페이지
+		int endPage = startPage + pageBlock-1;	// 끝페이지
+		if(endPage > lastPage) {
+			endPage = lastPage;
+		}
+		map.put("startPage", startPage);
+		map.put("endPage", endPage);
 		map.put("startRow", startRow);
 		map.put("rowPerPage", rowPerPage);
 		map.put("lastPage", lastPage);

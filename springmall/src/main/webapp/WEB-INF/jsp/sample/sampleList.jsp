@@ -11,11 +11,16 @@
 </head>
 <body>
 	<h1 align="center">sampleList</h1>
-	    <a href="/sample/addSample">
-            <button type="button" class="btn btn-danger">회원가입</button>
-        </a>
-	<table class="table">
+	<table class="table" style="width:60%;height:100px;margin:auto;text-align:center;">	<!-- 샘플리스트 -->
 		<thead>
+			<tr>
+				<td></td><td></td><td></td><td></td>
+				<td>
+					<a href="/sample/addSample">
+	            		<button type="button" class="btn btn-danger">회원가입</button>
+	        		</a>
+	       		</td>
+	        </tr>
 			<tr>
 				<td>SAMPLE NO</td>
 				<td>SAMPLE ID</td>
@@ -37,13 +42,45 @@
 			</c:forEach>
 		</tbody>
 	</table>
+		<!-- 페이징 -->
 		<div class="form-group text-center">
 			<c:if test="${currentPage > 1}">	<!-- 현재페이지가 1보다 크다면 이전버튼 생성 -->
-				<a href="${pageContext.request.contextPath}/sample/sampleList?currentPage=${currentPage-1}" class="btn btn-info">이전</a>
+			<a href="/sample/sampleList?currentPage=1" class="btn btn-link"><<</a>
+				<a href="/sample/sampleList?currentPage=${currentPage-1}" class="btn btn-info">이전</a>
 			</c:if>
+	        
+	        <c:forEach var = "click" begin="${startPage}" end="${endPage}" step="1">
+	            <c:if test = "${click!=currentPage}">
+	                <a href="/sample/sampleList?currentPage=${click}">${click}</a>
+	            </c:if>
+	            <c:if test = "${click == currentPage}">
+	                ${click}
+	            </c:if>
+	        </c:forEach>
+
 			<c:if test="${currentPage < lastPage}">		<!-- 현재페이지가 마지막페이지보다 작다면 다음버튼 생성 -->
-				<a href="${pageContext.request.contextPath}/sample/sampleList?currentPage=${currentPage+1}" class="btn btn-info">다음</a>
+				<a href="/sample/sampleList?currentPage=${currentPage+1}" class="btn btn-info">다음</a>
+				<a href="/sample/sampleList?currentPage=${lastPage}" class="btn btn-link">>></a>
 			</c:if>
 		</div>
+		<!-- 검색 -->
+		<form action="/sample/sampleList" method="post">
+			<table style="margin:auto;text-align:center;">
+				<tr>
+					<td>
+						<select name="categoly" class="form-control">
+							<option value="no">NO</option>
+							<option value="id">ID</option>
+						</select>
+					</td>
+					<td>
+						<input type = "text" name="search" class="form-control form-control">
+					</td>
+					<td>
+						<button type="submit" class="btn">검색</button>
+					</td>
+				</tr>
+			</table>
+		</form>
 </body>
 </html>
