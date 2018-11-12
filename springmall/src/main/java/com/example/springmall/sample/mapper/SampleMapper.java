@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.springmall.sample.vo.Sample;
+import com.example.springmall.sample.vo.SampleFile;
+import com.example.springmall.sample.vo.SampleRequest;
 
 @Mapper
 public interface SampleMapper {	// 추상메서드, 추상클래스, 인터페이스		// 완전하게 순수한 추상메서드는 굳이 클래스로 만들필요가 없다. 인터페이스로 만듦
@@ -21,5 +23,5 @@ public interface SampleMapper {	// 추상메서드, 추상클래스, 인터페�
 	// 5. update
 	int updateSample(Sample sample);
 	// 6. search
-	int selectSearch(Sample sample, String search);
+	List<Sample> searchSample(HashMap<String, Object> searchMap);
 }

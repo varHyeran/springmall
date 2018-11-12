@@ -36,7 +36,7 @@
 					<td>${sample.sampleNo}</td>
 					<td>${sample.sampleId}</td>
 					<td>${sample.samplePw}</td>
-					<td><a href="/sample/removeSample?sampleNo=${sample.sampleNo}">DLETE</a></td>
+					<td><a href="/sample/removeSample?sampleNo=${sample.sampleNo}">DELETE</a></td>
 					<td><a href="/sample/modifySample?sampleNo=${sample.sampleNo}">UPDATE</a></td>
 				</tr>
 			</c:forEach>
@@ -68,7 +68,7 @@
 			<table style="margin:auto;text-align:center;">
 				<tr>
 					<td>
-						<select name="categoly" class="form-control">
+						<select name="category" class="form-control">
 							<option value="no">NO</option>
 							<option value="id">ID</option>
 						</select>

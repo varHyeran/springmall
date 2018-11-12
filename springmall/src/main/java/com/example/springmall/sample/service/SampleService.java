@@ -1,25 +1,35 @@
 package com.example.springmall.sample.service;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.springmall.sample.mapper.SampleFileMapper;
 import com.example.springmall.sample.mapper.SampleMapper;
 import com.example.springmall.sample.vo.Sample;
+import com.example.springmall.sample.vo.SampleFile;
+import com.example.springmall.sample.vo.SampleRequest;
 
 @Service
 @Transactional	// 메소드 처리 도중 에러가 났을 때 자동으로 롤백
 public class SampleService {
 	@Autowired	// 의존관계를 자동설정할 때 사용
 	private SampleMapper sampleMapper;
+	@Autowired
+	private SampleFileMapper sampleFileMapper;
 	
-	public Sample searchSample(Sample sample, String search) {
+	
+	
+	public List<Sample> searchSample(HashMap<String, Object> searchMap) {
 		System.out.println("SampleService.searchSample()");
-		return sampleMapper.selectSearch(sample, search);
+		return sampleMapper.searchSample(searchMap);
 		
 	}
 	
@@ -51,11 +61,58 @@ public class SampleService {
      * @why		sample vo를 통해 회원가입
      * @param	Sample sample
      */
-	public int addSample(Sample sample) {
+	public int addSample(SampleRequest sampleRequest) {
 		System.out.println("SampleService.addSample()");
+		// 1
+		Sample sample = new Sample();
+		sample.setSampleId(sampleRequest.getSampleId());
+		sample.setSamplePw(sampleRequest.getSamplePw());
+		sampleMapper.insertSample(sample);	// auto increment에 의해 sampleNo가 만들어짐
+		// 2
+		SampleFile sampleFile = new SampleFile();
+		MultipartFile multipartFile = sampleRequest.getMultipartFile();
+		// 1. SampleFileNo : AutoIncrement
+		// 2. SampleNo
+		sampleFile.setSampleNo(sample.getSampleNo()); // insertSample(sample) 후에 PK값이 sample 자리에 채워진다
+		// 3. SampleFilePath
+		String path = "c:\\uploads";	// 복잡한 루틴을 통해서
+		sampleFile.setSampleFilePath(path);
+		// 4. 확장자
+		System.out.println("multipartFile.getOriginalFilename() : " + multipartFile.getOriginalFilename());
+		String originalFileName = multipartFile.getOriginalFilename();
+		int find = originalFileName.lastIndexOf(".");
+		String ext = originalFileName.substring(find+1);
+		System.out.println(ext + "<-------------ext");
+		sampleFile.setSampleFileExt(ext);
+		// 5. 이름
+		String filename = UUID.randomUUID().toString();
+		sampleFile.setSampleFileName(filename);
+		// 6. 타입
+		sampleFile.setSampleFileType(multipartFile.getContentType());
+		// 7. 크기
+		sampleFile.setSampleFileSize(multipartFile.getSize());
+		// 내가 원하는 이름의 빈파일을 하나 만들자
+		File f = new File(path + "\\" + filename + "." + ext);
+		// multipartFile 안에 있는 파일을 빈파일로 복사하자
+		try {
+			multipartFile.transferTo(f);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		sampleFileMapper.insertSampleFile(sampleFile);
+		
+		// 1+2 -> @Transactional
+		
 		return sampleMapper.insertSample(sample);
+		/*
+		 * SampleRequest --> Sample, SampleFile
+		 * 1. multipartfile 파일데이터 -> 저장
+		 * 2. multipartfile 정보 -> 새로운정보 추가 -> SampleFile
+		 */
 	}
-	
+
 	/*
 	 * 2. 삭제
 	 * @method	removeSample
@@ -64,6 +121,7 @@ public class SampleService {
      */
 	public int removeSample(int sampleNo) {
 		System.out.println("SampleService.removeSample()");
+		//sampleFileMapper.removeSampleFile(sampleNo);
 		return sampleMapper.deleteSample(sampleNo);
 	}
 	

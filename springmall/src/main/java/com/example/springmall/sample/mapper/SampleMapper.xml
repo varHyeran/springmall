@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <!-- 
 	public OTHER_CLASS implements com.example.springmall.sample.mapper.SampleMapper {
@@ -11,7 +9,7 @@
 <mapper namespace="com.example.springmall.sample.mapper.SampleMapper">
 	<!-- 전체회원조회(페이징) -->
 	    <select id="selectSampleAll" resultType="map">
-	        SELECT no as sampleNo, id as sampleId, pw as samplePw FROM sample ORDER BY no LIMIT #{startRow}, #{rowPerPage}
+	        SELECT sample_no as sampleNo, sample_id as sampleId, sample_pw as samplePw FROM sample ORDER BY sample_no LIMIT #{startRow}, #{rowPerPage}
 	    </select>
 	<!-- 전체행 -->
 	    <select id="selectSampleAllCount" resultType="int">
@@ -19,22 +17,25 @@
 	    </select>    
 	<!-- 회원탈퇴 -->
 		<delete id="deleteSample" parameterType="int">
-			DELETE FROM sample WHERE no = #{sampleNo}
+			DELETE FROM sample WHERE sample_no = #{sampleNo}
 		</delete>
 	<!-- 회원가입 -->
 		<insert id="insertSample" parameterType="com.example.springmall.sample.vo.Sample">
-			INSERT INTO sample(id, pw) VALUES(#{sampleId}, #{samplePw})
+			INSERT INTO sample(sample_id, sample_pw) VALUES(#{sampleId}, #{samplePw})
+				<selectKey resultType="int" keyProperty="sampleNo" order="AFTER">
+            		SELECT LAST_INSERT_ID()
+        		</selectKey>
 		</insert>
 	<!-- 수정화면 -->
 	    <select id="selectOne" parameterType="int" resultType="com.example.springmall.sample.vo.Sample">
-	        SELECT no as sampleNo, id as sampleId FROM sample WHERE no = #{sampleNo}
+	        SELECT sample_no as sampleNo, sample_id as sampleId FROM sample WHERE sample_no = #{sampleNo}
 	    </select>
 	<!-- 수정처리 -->
 	    <update id="updateSample" parameterType="com.example.springmall.sample.vo.Sample">
-			UPDATE sample SET pw = #{samplePw} WHERE no = #{sampleNo}
+			UPDATE sample SET sample_pw = #{samplePw} WHERE sample_no = #{sampleNo}
 	    </update>
 	<!-- 검색 -->
-		<select id="selectSearch" resultType="map">
-			SELECT no as sampleNo, id as sampleId, pw as samplePw FROM sample WHERE no = #{sampleNo} OR id = #{sampleId}
+		<select id="searchSample" resultType="map">
+			SELECT sample_no as sampleNo, sample_id as sampleId FROM sample WHERE sample_no = #{sampleNo} OR sample_id = #{sampleId}
 		</select>
 </mapper>

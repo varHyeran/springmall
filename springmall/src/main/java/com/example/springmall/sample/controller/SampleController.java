@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.springmall.sample.service.SampleService;
 import com.example.springmall.sample.vo.Sample;
+import com.example.springmall.sample.vo.SampleRequest;
 
 @Controller
 public class SampleController {
@@ -22,9 +23,13 @@ public class SampleController {
 	public String searchSample(Model model, @RequestParam(value="category") Sample sample, @RequestParam(value="search") String search) {
 		System.out.println("SampleController.searchSample()");
 		HashMap<String, Object> searchMap = new HashMap<String, Object>();
-        searhMap.put("sampleNo", sampleNo);
-		sampleService.searchSample(sample, search);
-		return search;
+        searchMap.put("sampleNo", sample.getSampleNo());
+        searchMap.put("search", search);
+		List<Sample> returnSearchSample = sampleService.searchSample(searchMap);
+		model.addAttribute("searchSample", returnSearchSample);
+		model.addAttribute("no", searchMap.get("sampleNo"));
+		model.addAttribute("id", searchMap.get("sampleId"));
+		return "/sample/sampleList";
 	}
 	
 	/*
@@ -72,10 +77,11 @@ public class SampleController {
      * @param	Sample sample
      */
 	@RequestMapping(value="/sample/addSample", method=RequestMethod.POST)
-	public String addSample(Sample sample) {	// command 객체. vo.sample 데이터부분에 변수명과 input name이 같아야한다	// Sample의 친구들이 존재할 수 있다
+	public String addSample(SampleRequest sampleRequest) {	// command 객체. vo.sample 데이터부분에 변수명과 input name이 같아야한다	// Sample의 친구들이 존재할 수 있다
 		// command객체의 멤버변수 == input태그 name속성, 표준setter로 존재
 		System.out.println("SampleController.addSample() 입력 액션");
-		sampleService.addSample(sample);
+		System.out.println("SampleRequest.multipartFile : " + sampleRequest.getMultipartFile());
+		sampleService.addSample(sampleRequest);
 		return "redirect:/sample/sampleList";
 	}
 	
