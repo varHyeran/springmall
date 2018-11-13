@@ -41,6 +41,7 @@ public class SampleService {
      */
 	public Sample getSample(int sampleNo) {
 		System.out.println("SampleService.getSample()");
+		//SampleFile sampleFile =sampleFileMapper.selectSampleFile(sampleNo);
 		return sampleMapper.selectOne(sampleNo);
 	}
 
@@ -52,6 +53,7 @@ public class SampleService {
      */
 	public int modifySample(Sample sample) {
 		System.out.println("SampleService.modifySample()");
+		
 		return sampleMapper.updateSample(sample);
 	}
 	
@@ -61,7 +63,7 @@ public class SampleService {
      * @why		sample vo를 통해 회원가입
      * @param	Sample sample
      */
-	public int addSample(SampleRequest sampleRequest) {
+	public void addSample(SampleRequest sampleRequest) {
 		System.out.println("SampleService.addSample()");
 		// 1
 		Sample sample = new Sample();
@@ -104,8 +106,7 @@ public class SampleService {
 		sampleFileMapper.insertSampleFile(sampleFile);
 		
 		// 1+2 -> @Transactional
-		
-		return sampleMapper.insertSample(sample);
+
 		/*
 		 * SampleRequest --> Sample, SampleFile
 		 * 1. multipartfile 파일데이터 -> 저장
@@ -121,7 +122,15 @@ public class SampleService {
      */
 	public int removeSample(int sampleNo) {
 		System.out.println("SampleService.removeSample()");
-		//sampleFileMapper.removeSampleFile(sampleNo);
+		SampleFile sampleFile = sampleFileMapper.selectSampleFile(sampleNo);
+		System.out.print(sampleFile + "<-------sampleFile");
+		String path = sampleFile.getSampleFilePath();
+		String filename = sampleFile.getSampleFileName();
+		String ext = sampleFile.getSampleFileExt();
+		File f = new File(path + "\\" + filename + "." + ext);
+		System.out.println(f+ "<------------f");
+		f.delete();
+		sampleFileMapper.removeSampleFile(sampleNo);
 		return sampleMapper.deleteSample(sampleNo);
 	}
 	

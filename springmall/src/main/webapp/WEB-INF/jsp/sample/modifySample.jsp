@@ -43,6 +43,10 @@
 					<td><input type="text" name="sampleId" class="form-control" value="${sample.sampleId}" readonly></td>
 				</tr>
 				<tr>
+					<th>FILE</th>
+					<td><input type="text" name="sampleFild" value="${fileName}"></td>
+				</tr>
+				<tr>
 					<th>PW</tj>
 					<td><input type="password" id="samplePw" name="samplePw" class="form-control"><span id="pwHelper"></span></td>
 					<td><button type="submit" id="submitBtn" class="btn btn-primary" class="btn btn-primary">수정</button></td>
@@ -50,4 +54,5 @@
 			</table>
 		</form>
 </body>
+sssssssss->>>>>>${filename}
 </html>

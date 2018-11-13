@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.springmall.sample.service.SampleService;
 import com.example.springmall.sample.vo.Sample;
+import com.example.springmall.sample.vo.SampleFile;
 import com.example.springmall.sample.vo.SampleRequest;
 
 @Controller
@@ -77,7 +78,7 @@ public class SampleController {
      * @param	Sample sample
      */
 	@RequestMapping(value="/sample/addSample", method=RequestMethod.POST)
-	public String addSample(SampleRequest sampleRequest) {	// command 객체. vo.sample 데이터부분에 변수명과 input name이 같아야한다	// Sample의 친구들이 존재할 수 있다
+	public String addSample(Model model, SampleRequest sampleRequest) {	// command 객체. vo.sample 데이터부분에 변수명과 input name이 같아야한다	// Sample의 친구들이 존재할 수 있다
 		// command객체의 멤버변수 == input태그 name속성, 표준setter로 존재
 		System.out.println("SampleController.addSample() 입력 액션");
 		System.out.println("SampleRequest.multipartFile : " + sampleRequest.getMultipartFile());
@@ -95,6 +96,7 @@ public class SampleController {
 	public String removeSample(@RequestParam(value="sampleNo") int sampleNo) {	// 스프링은 매개변수 타입을 모두 자기가 바꾼다
 		System.out.println("SampleController.removeSample()");
 		sampleService.removeSample(sampleNo);
+		
 		return "redirect:/sample/sampleList";	// redirect라는 문자열이 있으면 view가 아니다(없으면 view의 이름이라고 생각)
 	}
 	
