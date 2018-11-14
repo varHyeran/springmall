@@ -31,9 +31,9 @@
 </script>
 </head>
 <body>
-	<h1>modifySample</h1>
+	<h1 align="center">modifySample</h1>
 		<form action="/sample/modifySample" method="post" id="modifySampleForm">
-			<table>
+			<table class = "table" style="width:40%;height:100px;margin:auto;">
 				<tr>
 					<th>NO</th>
 					<td><input type="text" name="sampleNo" class="form-control" value="${sample.sampleNo}" readonly></td>
@@ -43,16 +43,21 @@
 					<td><input type="text" name="sampleId" class="form-control" value="${sample.sampleId}" readonly></td>
 				</tr>
 				<tr>
-					<th>FILE</th>
-					<td><input type="text" name="sampleFild" value="${fileName}"></td>
+					<th rowspan="2">FILE</th>
+					<td><input type="text" name="sampleFile" class="form-control" value="${sampleFile.sampleFileName}.${sampleFile.sampleFileExt}"></td>
+				</tr>
+				<tr>
+					<td><input type="file" name="multipartFile"></td>
 				</tr>
 				<tr>
 					<th>PW</tj>
 					<td><input type="password" id="samplePw" name="samplePw" class="form-control"><span id="pwHelper"></span></td>
-					<td><button type="submit" id="submitBtn" class="btn btn-primary" class="btn btn-primary">수정</button></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><button type="submit" id="submitBtn" class="btn btn-primary" align="center">수정</button>
+					<a href="/sample/sampleList" class="btn btn-warning">홈으로</a></td>
 				</tr>
 			</table>
 		</form>
 </body>
-sssssssss->>>>>>${filename}
 </html>

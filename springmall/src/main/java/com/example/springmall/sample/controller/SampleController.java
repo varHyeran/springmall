@@ -42,8 +42,9 @@ public class SampleController {
 	@RequestMapping(value="/sample/modifySample", method=RequestMethod.GET)
 	public String modifySample(Model model, @RequestParam(value="sampleNo") int sampleNo) {	
 		System.out.println("SampleController.modifySample() 수정 폼");
-		Sample sample = sampleService.getSample(sampleNo);
-		model.addAttribute("sample", sample);
+		HashMap<String, Object> map = sampleService.getSample(sampleNo);
+		model.addAttribute("sample", map.get("sample"));
+		model.addAttribute("sampleFile", map.get("sampleFile"));
 		return "/sample/modifySample";	
 	}
 	
@@ -56,6 +57,7 @@ public class SampleController {
 	@RequestMapping(value="/sample/modifySample", method=RequestMethod.POST)
 	public String modifySample(Sample sample) {
 		System.out.println("SampleController.modifySample() 수정 액션");
+		
 		sampleService.modifySample(sample);
 		return "redirect:/sample/sampleList";
 	}
@@ -81,7 +83,7 @@ public class SampleController {
 	public String addSample(Model model, SampleRequest sampleRequest) {	// command 객체. vo.sample 데이터부분에 변수명과 input name이 같아야한다	// Sample의 친구들이 존재할 수 있다
 		// command객체의 멤버변수 == input태그 name속성, 표준setter로 존재
 		System.out.println("SampleController.addSample() 입력 액션");
-		System.out.println("SampleRequest.multipartFile : " + sampleRequest.getMultipartFile());
+		System.out.println("SampleRequest.multipartFile 입력 액션: " + sampleRequest.getMultipartFile());
 		sampleService.addSample(sampleRequest);
 		return "redirect:/sample/sampleList";
 	}

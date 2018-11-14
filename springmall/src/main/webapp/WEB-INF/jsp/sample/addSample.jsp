@@ -38,9 +38,9 @@
 </script>
 </head>
 <body>
-	<h1>addSample</h1>
+	<h1 align="center">addSample</h1>
 	<form action="/sample/addSample" method="post" id="addSampleForm" enctype="multipart/form-data">
-		<table>
+		<table class = "table" style="width:40%;height:100px;margin:auto;">
 			<tr>
 				<th>ID</th>
 				<td><input type="text" id="sampleId" name="sampleId" class="form-control" placeholder="아이디"><span id="idHelper"></span></td>
@@ -52,7 +52,10 @@
 			<tr>
 				<th>FILE</th>
 				<td><input type="file" name="multipartFile"></td>
-				<td><button type="submit" class="btn btn-primary" id="submitBtn">가입</button></td>
+			</tr>
+			<tr>
+				<td colspan="3" align="center"><button type="submit" class="btn btn-primary" id="submitBtn">가입</button>
+				<a href="/sample/sampleList" class="btn btn-warning">홈으로</a></td>
 			</tr>
 		</table>
 	</form>

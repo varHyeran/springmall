@@ -39,10 +39,14 @@ public class SampleService {
      * @why		sampleNo에 해당하는 회원정보 출력
      * @param	int sampleNo
      */
-	public Sample getSample(int sampleNo) {
+	public HashMap<String, Object> getSample(int sampleNo) {
 		System.out.println("SampleService.getSample()");
-		//SampleFile sampleFile =sampleFileMapper.selectSampleFile(sampleNo);
-		return sampleMapper.selectOne(sampleNo);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		SampleFile sampleFile =sampleFileMapper.selectSampleFile(sampleNo);
+		Sample sample = sampleMapper.selectOne(sampleNo);
+		map.put("sampleFile", sampleFile);
+		map.put("sample", sample);
+		return map;
 	}
 
 	/*
@@ -53,7 +57,6 @@ public class SampleService {
      */
 	public int modifySample(Sample sample) {
 		System.out.println("SampleService.modifySample()");
-		
 		return sampleMapper.updateSample(sample);
 	}
 	
