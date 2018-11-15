@@ -55,9 +55,69 @@ public class SampleService {
      * @why		sample vo를 통해  회원수정
      * @param	Sample sample
      */
-	public int modifySample(Sample sample) {
+	public void modifySample(SampleRequest sampleRequest, String formFileName) {
 		System.out.println("SampleService.modifySample()");
-		return sampleMapper.updateSample(sample);
+		// 1
+		Sample sample = new Sample();
+		sample.setSampleNo(sampleRequest.getSampleNo());
+		sample.setSamplePw(sampleRequest.getSamplePw());
+		// 2
+		SampleFile sampleFile = new SampleFile();
+		MultipartFile multipartFile = sampleRequest.getMultipartFile();
+		// 1. SampleFileNo : AutoIncrement
+		// 2. SampleNo
+		sampleFile.setSampleNo(sampleRequest.getSampleNo()); // insertSample(sample) 후에 PK값이 sample 자리에 채워진다
+		// 3. SampleFilePath
+		String path = "c:\\uploads";	// 복잡한 루틴을 통해서
+		sampleFile.setSampleFilePath(path);
+		// 4. 확장자
+		System.out.println("multipartFile.getOriginalFilename() : " + multipartFile.getOriginalFilename());
+		String originalFileName = multipartFile.getOriginalFilename();
+		int find = originalFileName.lastIndexOf(".");
+		String ext = originalFileName.substring(find+1);
+		System.out.println(ext + "<-------------ext");
+		sampleFile.setSampleFileExt(ext);
+		// 5. 이름
+		String filename = UUID.randomUUID().toString();
+		sampleFile.setSampleFileName(filename);
+		// 6. 타입
+		sampleFile.setSampleFileType(multipartFile.getContentType());
+		// 7. 크기
+		sampleFile.setSampleFileSize(multipartFile.getSize());
+		
+		if(sampleRequest.getMultipartFile().getOriginalFilename().length() != 0) {
+
+			
+			sampleMapper.updateSample(sample);
+			sampleFileMapper.modifySampleFile(sampleFile);
+			File beforeFile = new File(path + "\\" + formFileName);
+			System.out.println(beforeFile+ "<------------beforeFile");
+			beforeFile.delete();
+			
+			File afterFile = new File(path + "\\" + filename + "." + ext);
+			try {
+				multipartFile.transferTo(afterFile);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if(sampleRequest.getMultipartFile().getOriginalFilename().length() == 0) {
+			System.out.println("파일 변경 안했을 때");
+			sampleMapper.updateSample(sample);
+		} else if(formFileName.length() == 0) {
+			System.out.println("파일 없는 회원정보에서 파일 추가할 때");
+			File f = new File(path + "\\" + filename + "." + ext);
+			// multipartFile 안에 있는 파일을 빈파일로 복사하자
+			try {
+				multipartFile.transferTo(f);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			sampleFileMapper.insertSampleFile(sampleFile);
+		}
 	}
 	
 	/*

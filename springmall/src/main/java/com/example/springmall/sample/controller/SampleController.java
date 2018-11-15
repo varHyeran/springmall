@@ -45,6 +45,10 @@ public class SampleController {
 		HashMap<String, Object> map = sampleService.getSample(sampleNo);
 		model.addAttribute("sample", map.get("sample"));
 		model.addAttribute("sampleFile", map.get("sampleFile"));
+		String dot = ".";
+		if(map.get("sampleFile") != null) {
+			model.addAttribute("dot", dot);
+		}
 		return "/sample/modifySample";	
 	}
 	
@@ -55,10 +59,10 @@ public class SampleController {
      * @param	Sample sample
      */
 	@RequestMapping(value="/sample/modifySample", method=RequestMethod.POST)
-	public String modifySample(Sample sample) {
+	public String modifySample(SampleRequest sampleRequest, String formFileName) {
 		System.out.println("SampleController.modifySample() 수정 액션");
-		
-		sampleService.modifySample(sample);
+		System.out.println(sampleRequest + "<-----------sampleRequest");
+		sampleService.modifySample(sampleRequest, formFileName);
 		return "redirect:/sample/sampleList";
 	}
 	

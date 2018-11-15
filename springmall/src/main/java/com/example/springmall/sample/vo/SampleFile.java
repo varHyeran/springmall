@@ -18,56 +18,56 @@ public class SampleFile {
 	}
 	public void setSampleFileNo(int sampleFileNo) {
 		this.sampleFileNo = sampleFileNo;
-		System.out.println(sampleFileNo + "<---- setSampleFileNo");
+		System.out.println(sampleFileNo + "<---- SampleFile.setSampleFileNo");
 	}
 	public int getSampleNo() {
 		return sampleNo;
 	}
 	public void setSampleNo(int sampleNo) {
 		this.sampleNo = sampleNo;
-		System.out.println(sampleNo + "<---- setSampleNo");
+		System.out.println(sampleNo + "<---- SampleFile.setSampleNo");
 	}
 	public String getSampleFilePath() {
 		return sampleFilePath;
 	}
 	public void setSampleFilePath(String sampleFilePath) {
 		this.sampleFilePath = sampleFilePath;
-		System.out.println(sampleFilePath + "<---- setSampleFilePath");
+		System.out.println(sampleFilePath + "<---- SampleFile.setSampleFilePath");
 	}
 	public String getSampleFileName() {
 		return sampleFileName;
 	}
 	public void setSampleFileName(String sampleFileName) {
 		this.sampleFileName = sampleFileName;
-		System.out.println(sampleFileName + "<---- setSampleFileName");
+		System.out.println(sampleFileName + "<---- SampleFile.setSampleFileName");
 	}
 	public String getSampleFileExt() {
 		return sampleFileExt;
 	}
 	public void setSampleFileExt(String sampleFileExt) {
 		this.sampleFileExt = sampleFileExt;
-		System.out.println(sampleFileExt + "<---- setSampleFileExt");
+		System.out.println(sampleFileExt + "<---- SampleFile.setSampleFileExt");
 	}
 	public String getSampleFileType() {
 		return sampleFileType;
 	}
 	public void setSampleFileType(String sampleFileType) {
 		this.sampleFileType = sampleFileType;
-		System.out.println(sampleFileType + "<---- setSampleFileType");
+		System.out.println(sampleFileType + "<---- SampleFile.setSampleFileType");
 	}
 	public long getSampleFileSize() {
 		return sampleFileSize;
 	}
 	public void setSampleFileSize(long sampleFileSize) {
 		this.sampleFileSize = sampleFileSize;
-		System.out.println(sampleFileSize + "<---- setSampleFileSize");
+		System.out.println(sampleFileSize + "<---- SampleFile.setSampleFileSize");
 	}
 	public String getSampleFileDate() {
 		return sampleFileDate;
 	}
 	public void setSampleFileDate(String sampleFileDate) {
 		this.sampleFileDate = sampleFileDate;
-		System.out.println(sampleFileDate + "<---- setSampleFileDate");
+		System.out.println(sampleFileDate + "<---- SampleFile.setSampleFileDate");
 	}
 	@Override
 	public String toString() {

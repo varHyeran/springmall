@@ -32,7 +32,7 @@
 </head>
 <body>
 	<h1 align="center">modifySample</h1>
-		<form action="/sample/modifySample" method="post" id="modifySampleForm">
+		<form action="/sample/modifySample" method="post" id="modifySampleForm" enctype="multipart/form-data">
 			<table class = "table" style="width:40%;height:100px;margin:auto;">
 				<tr>
 					<th>NO</th>
@@ -44,7 +44,7 @@
 				</tr>
 				<tr>
 					<th rowspan="2">FILE</th>
-					<td><input type="text" name="sampleFile" class="form-control" value="${sampleFile.sampleFileName}.${sampleFile.sampleFileExt}"></td>
+					<td><input type="text" name="formFileName" class="form-control" value="${sampleFile.sampleFileName}${dot}${sampleFile.sampleFileExt}"></td>
 				</tr>
 				<tr>
 					<td><input type="file" name="multipartFile"></td>
