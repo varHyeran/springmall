@@ -6,10 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.example.springmall.sample.mapper.SampleFileMapper;
 import com.example.springmall.sample.mapper.SampleMapper;
@@ -30,7 +33,6 @@ public class SampleService {
 	public List<Sample> searchSample(HashMap<String, Object> searchMap) {
 		System.out.println("SampleService.searchSample()");
 		return sampleMapper.searchSample(searchMap);
-		
 	}
 	
 	/*
@@ -55,20 +57,27 @@ public class SampleService {
      * @why		sample vo를 통해  회원수정
      * @param	Sample sample
      */
-	public void modifySample(SampleRequest sampleRequest, String formFileName) {
+	public void modifySample(SampleRequest sampleRequest, String formFileName, MultipartHttpServletRequest request, HttpSession session) {
 		System.out.println("SampleService.modifySample()");
-		// 1
+		// 파일 외 회원정보 수정
 		Sample sample = new Sample();
 		sample.setSampleNo(sampleRequest.getSampleNo());
 		sample.setSamplePw(sampleRequest.getSamplePw());
-		// 2
+		sampleMapper.updateSample(sample);
+		// 파일 수정
 		SampleFile sampleFile = new SampleFile();
 		MultipartFile multipartFile = sampleRequest.getMultipartFile();
 		// 1. SampleFileNo : AutoIncrement
 		// 2. SampleNo
 		sampleFile.setSampleNo(sampleRequest.getSampleNo()); // insertSample(sample) 후에 PK값이 sample 자리에 채워진다
-		// 3. SampleFilePath
-		String path = "c:\\uploads";	// 복잡한 루틴을 통해서
+		// 3. SampleFilePath(상대경로 지정, 디렉토리 없으면 디렉토리 추가)
+		String path = request.getSession().getServletContext().getRealPath("realPath\\uploads");
+		System.out.println(path + "<---- path");
+		File fileSaveDir = new File(path);
+		if(!fileSaveDir.exists()) {
+			fileSaveDir.mkdirs();
+			System.out.println("디렉토리 생성 완료");
+		}
 		sampleFile.setSampleFilePath(path);
 		// 4. 확장자
 		System.out.println("multipartFile.getOriginalFilename() : " + multipartFile.getOriginalFilename());
@@ -84,39 +93,31 @@ public class SampleService {
 		sampleFile.setSampleFileType(multipartFile.getContentType());
 		// 7. 크기
 		sampleFile.setSampleFileSize(multipartFile.getSize());
-		
-		if(sampleRequest.getMultipartFile().getOriginalFilename().length() != 0) {
 
-			
-			sampleMapper.updateSample(sample);
-			sampleFileMapper.modifySampleFile(sampleFile);
-			File beforeFile = new File(path + "\\" + formFileName);
-			System.out.println(beforeFile+ "<------------beforeFile");
-			beforeFile.delete();
-			
-			File afterFile = new File(path + "\\" + filename + "." + ext);
-			try {
-				multipartFile.transferTo(afterFile);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+		if(sampleRequest.getMultipartFile().getOriginalFilename().length() != 0) {	// 파일업로드 수정
+			if(formFileName.length() != 0) {	// 기존 회원정보에서 파일이 있을 때(formFileName -> modifySample.jsp참고)
+				sampleFileMapper.modifySampleFile(sampleFile);
+				File beforeFile = new File(path + "\\" + formFileName);
+				beforeFile.delete();
+				File afterFile = new File(path + "\\" + filename + "." + ext);
+					try {
+						multipartFile.transferTo(afterFile);
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+			} else {	// 기존 회원정보에서 파일이 없을 때
+				File f = new File(path + "\\" + filename + "." + ext);
+					try {
+						multipartFile.transferTo(f);
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				sampleFileMapper.insertSampleFile(sampleFile);
 			}
-		} else if(sampleRequest.getMultipartFile().getOriginalFilename().length() == 0) {
-			System.out.println("파일 변경 안했을 때");
-			sampleMapper.updateSample(sample);
-		} else if(formFileName.length() == 0) {
-			System.out.println("파일 없는 회원정보에서 파일 추가할 때");
-			File f = new File(path + "\\" + filename + "." + ext);
-			// multipartFile 안에 있는 파일을 빈파일로 복사하자
-			try {
-				multipartFile.transferTo(f);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			sampleFileMapper.insertSampleFile(sampleFile);
 		}
 	}
 	
@@ -126,7 +127,7 @@ public class SampleService {
      * @why		sample vo를 통해 회원가입
      * @param	Sample sample
      */
-	public void addSample(SampleRequest sampleRequest) {
+	public void addSample(SampleRequest sampleRequest, MultipartHttpServletRequest request, HttpSession session) {
 		System.out.println("SampleService.addSample()");
 		// 1
 		Sample sample = new Sample();
@@ -139,8 +140,14 @@ public class SampleService {
 		// 1. SampleFileNo : AutoIncrement
 		// 2. SampleNo
 		sampleFile.setSampleNo(sample.getSampleNo()); // insertSample(sample) 후에 PK값이 sample 자리에 채워진다
-		// 3. SampleFilePath
-		String path = "c:\\uploads";	// 복잡한 루틴을 통해서
+		// 3. SampleFilePath(상대경로 지정, 디렉토리 없으면 디렉토리 추가)
+		String path = request.getSession().getServletContext().getRealPath("realPath\\uploads");
+		System.out.println(path + "<---- path");
+		File fileSaveDir = new File(path);
+		if(!fileSaveDir.exists()) {
+			fileSaveDir.mkdirs();
+			System.out.println("디렉토리 생성 완료");
+		}
 		sampleFile.setSampleFilePath(path);
 		// 4. 확장자
 		System.out.println("multipartFile.getOriginalFilename() : " + multipartFile.getOriginalFilename());

@@ -3,16 +3,18 @@ package com.example.springmall.sample.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.example.springmall.sample.service.SampleService;
 import com.example.springmall.sample.vo.Sample;
-import com.example.springmall.sample.vo.SampleFile;
 import com.example.springmall.sample.vo.SampleRequest;
 
 @Controller
@@ -59,10 +61,10 @@ public class SampleController {
      * @param	Sample sample
      */
 	@RequestMapping(value="/sample/modifySample", method=RequestMethod.POST)
-	public String modifySample(SampleRequest sampleRequest, String formFileName) {
+	public String modifySample(SampleRequest sampleRequest, String formFileName, MultipartHttpServletRequest request, HttpSession session) {
 		System.out.println("SampleController.modifySample() 수정 액션");
 		System.out.println(sampleRequest + "<-----------sampleRequest");
-		sampleService.modifySample(sampleRequest, formFileName);
+		sampleService.modifySample(sampleRequest, formFileName, request, session);
 		return "redirect:/sample/sampleList";
 	}
 	
@@ -84,11 +86,11 @@ public class SampleController {
      * @param	Sample sample
      */
 	@RequestMapping(value="/sample/addSample", method=RequestMethod.POST)
-	public String addSample(Model model, SampleRequest sampleRequest) {	// command 객체. vo.sample 데이터부분에 변수명과 input name이 같아야한다	// Sample의 친구들이 존재할 수 있다
+	public String addSample(SampleRequest sampleRequest, MultipartHttpServletRequest request, HttpSession session) {	// command 객체. vo.sample 데이터부분에 변수명과 input name이 같아야한다	// Sample의 친구들이 존재할 수 있다
 		// command객체의 멤버변수 == input태그 name속성, 표준setter로 존재
 		System.out.println("SampleController.addSample() 입력 액션");
 		System.out.println("SampleRequest.multipartFile 입력 액션: " + sampleRequest.getMultipartFile());
-		sampleService.addSample(sampleRequest);
+		sampleService.addSample(sampleRequest, request, session);
 		return "redirect:/sample/sampleList";
 	}
 	
