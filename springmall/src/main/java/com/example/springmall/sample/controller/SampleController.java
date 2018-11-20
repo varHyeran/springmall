@@ -3,8 +3,6 @@ package com.example.springmall.sample.controller;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,10 +59,10 @@ public class SampleController {
      * @param	Sample sample
      */
 	@RequestMapping(value="/sample/modifySample", method=RequestMethod.POST)
-	public String modifySample(SampleRequest sampleRequest, String formFileName, MultipartHttpServletRequest request, HttpSession session) {
+	public String modifySample(SampleRequest sampleRequest, String formFileName, MultipartHttpServletRequest request) {
 		System.out.println("SampleController.modifySample() 수정 액션");
 		System.out.println(sampleRequest + "<-----------sampleRequest");
-		sampleService.modifySample(sampleRequest, formFileName, request, session);
+		sampleService.modifySample(sampleRequest, formFileName, request);
 		return "redirect:/sample/sampleList";
 	}
 	
@@ -86,11 +84,11 @@ public class SampleController {
      * @param	Sample sample
      */
 	@RequestMapping(value="/sample/addSample", method=RequestMethod.POST)
-	public String addSample(SampleRequest sampleRequest, MultipartHttpServletRequest request, HttpSession session) {	// command 객체. vo.sample 데이터부분에 변수명과 input name이 같아야한다	// Sample의 친구들이 존재할 수 있다
+	public String addSample(SampleRequest sampleRequest, MultipartHttpServletRequest request) {	// command 객체. vo.sample 데이터부분에 변수명과 input name이 같아야한다	// Sample의 친구들이 존재할 수 있다
 		// command객체의 멤버변수 == input태그 name속성, 표준setter로 존재
 		System.out.println("SampleController.addSample() 입력 액션");
 		System.out.println("SampleRequest.multipartFile 입력 액션: " + sampleRequest.getMultipartFile());
-		sampleService.addSample(sampleRequest, request, session);
+		sampleService.addSample(sampleRequest, request);
 		return "redirect:/sample/sampleList";
 	}
 	

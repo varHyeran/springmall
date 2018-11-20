@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +55,7 @@ public class SampleService {
      * @why		sample vo를 통해  회원수정
      * @param	Sample sample
      */
-	public void modifySample(SampleRequest sampleRequest, String formFileName, MultipartHttpServletRequest request, HttpSession session) {
+	public void modifySample(SampleRequest sampleRequest, String formFileName, MultipartHttpServletRequest request) {
 		System.out.println("SampleService.modifySample()");
 		// 파일 외 회원정보 수정
 		Sample sample = new Sample();
@@ -127,7 +125,7 @@ public class SampleService {
      * @why		sample vo를 통해 회원가입
      * @param	Sample sample
      */
-	public void addSample(SampleRequest sampleRequest, MultipartHttpServletRequest request, HttpSession session) {
+	public void addSample(SampleRequest sampleRequest, MultipartHttpServletRequest request) {
 		System.out.println("SampleService.addSample()");
 		// 1
 		Sample sample = new Sample();

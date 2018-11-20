@@ -44,7 +44,7 @@
 				</tr>
 				<tr>
 					<th rowspan="2">FILE</th>
-					<td><input type="text" name="formFileName" class="form-control" value="${sampleFile.sampleFileName}${dot}${sampleFile.sampleFileExt}"></td>
+					<td><a href="#"><input type="text" style="cursor:pointer" name="formFileName" class="form-control" value="${sampleFile.sampleFileName}${dot}${sampleFile.sampleFileExt}"></a></td>
 				</tr>
 				<tr>
 					<td><input type="file" name="multipartFile"></td>
