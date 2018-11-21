@@ -3,6 +3,8 @@ package com.example.springmall.sample.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,11 +27,12 @@ public class SampleController {
 		System.out.println("SampleController.searchSample()");
 		HashMap<String, Object> searchMap = new HashMap<String, Object>();
         searchMap.put("sampleNo", sample.getSampleNo());
+        searchMap.put("sampleId", sample.getSampleId());
         searchMap.put("search", search);
 		List<Sample> returnSearchSample = sampleService.searchSample(searchMap);
-		model.addAttribute("searchSample", returnSearchSample);
-		model.addAttribute("no", searchMap.get("sampleNo"));
-		model.addAttribute("id", searchMap.get("sampleId"));
+/*		model.addAttribute("searchSample", returnSearchSample);
+		model.addAttribute("sampleNo", searchMap.get("sampleNo"));
+		model.addAttribute("sampleId", searchMap.get("sampleId"));*/
 		return "/sample/sampleList";
 	}
 	
@@ -59,10 +62,11 @@ public class SampleController {
      * @param	Sample sample
      */
 	@RequestMapping(value="/sample/modifySample", method=RequestMethod.POST)
-	public String modifySample(SampleRequest sampleRequest, String formFileName, MultipartHttpServletRequest request) {
+	public String modifySample(SampleRequest sampleRequest, String formFileName, MultipartHttpServletRequest request, HttpServletResponse response) {
 		System.out.println("SampleController.modifySample() 수정 액션");
 		System.out.println(sampleRequest + "<-----------sampleRequest");
-		sampleService.modifySample(sampleRequest, formFileName, request);
+		
+		sampleService.modifySample(sampleRequest, formFileName, request, response);
 		return "redirect:/sample/sampleList";
 	}
 	

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,9 @@ public class SampleService {
 	
 	public List<Sample> searchSample(HashMap<String, Object> searchMap) {
 		System.out.println("SampleService.searchSample()");
+		if(searchMap.get("cagegory") != null && searchMap.get("search") != null) {
+			System.out.println("Yes category Yes search");
+		}
 		return sampleMapper.searchSample(searchMap);
 	}
 	
@@ -55,7 +60,7 @@ public class SampleService {
      * @why		sample vo를 통해  회원수정
      * @param	Sample sample
      */
-	public void modifySample(SampleRequest sampleRequest, String formFileName, MultipartHttpServletRequest request) {
+	public void modifySample(SampleRequest sampleRequest, String formFileName, MultipartHttpServletRequest request, HttpServletResponse response) {
 		System.out.println("SampleService.modifySample()");
 		// 파일 외 회원정보 수정
 		Sample sample = new Sample();
@@ -92,31 +97,44 @@ public class SampleService {
 		// 7. 크기
 		sampleFile.setSampleFileSize(multipartFile.getSize());
 
-		if(sampleRequest.getMultipartFile().getOriginalFilename().length() != 0) {	// 파일업로드 수정
-			if(formFileName.length() != 0) {	// 기존 회원정보에서 파일이 있을 때(formFileName -> modifySample.jsp참고)
-				sampleFileMapper.modifySampleFile(sampleFile);
-				File beforeFile = new File(path + "\\" + formFileName);
-				beforeFile.delete();
-				File afterFile = new File(path + "\\" + filename + "." + ext);
-					try {
-						multipartFile.transferTo(afterFile);
-					} catch (IllegalStateException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-			} else {	// 기존 회원정보에서 파일이 없을 때
-				File f = new File(path + "\\" + filename + "." + ext);
-					try {
-						multipartFile.transferTo(f);
-					} catch (IllegalStateException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				sampleFileMapper.insertSampleFile(sampleFile);
+			if(sampleRequest.getMultipartFile().getOriginalFilename().length() != 0) {	// 파일업로드 수정
+				if(formFileName.length() != 0) {	// 기존 회원정보에서 파일이 있을 때(formFileName -> modifySample.jsp참고)
+					sampleFileMapper.modifySampleFile(sampleFile);
+					File beforeFile = new File(path + "\\" + formFileName);
+					beforeFile.delete();
+					File afterFile = new File(path + "\\" + filename + "." + ext);
+						try {
+							multipartFile.transferTo(afterFile);
+						} catch (IllegalStateException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+				} else {	// 기존 회원정보에서 파일이 없을 때
+					File f = new File(path + "\\" + filename + "." + ext);
+						try {
+							multipartFile.transferTo(f);
+						} catch (IllegalStateException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					sampleFileMapper.insertSampleFile(sampleFile);
+				}
 			}
-		}
+		// 다운로드
+			
+			String downloadPath = response.getContentType();
+			if(formFileName != null) {
+				System.out.println(downloadPath + "<-----------downloadPath");
+			}
+			
+					//.getSession().getServletContext().getRealPath("\\downloads");
+/*			File fileDownload = new File(downloadPath);
+				if(!fileDownload.exists()) {
+					fileDownload.mkdirs();
+					System.out.println("다운로드 폴더 생성 성공");
+				}*/
 	}
 	
 	/*
@@ -222,9 +240,9 @@ public class SampleService {
 		int pageBlock = 5;	// 한블럭당 5페이지씩
 		int startPage = (((int)map.get("currentPage")-1)/pageBlock)*pageBlock+1;	// 시작페이지
 		int endPage = startPage + pageBlock-1;	// 끝페이지
-		if(endPage > lastPage) {
-			endPage = lastPage;
-		}
+			if(endPage > lastPage) {
+				endPage = lastPage;
+			}
 		map.put("startPage", startPage);
 		map.put("endPage", endPage);
 		map.put("startRow", startRow);

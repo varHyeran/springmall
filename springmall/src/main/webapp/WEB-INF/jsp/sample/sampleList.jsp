@@ -69,8 +69,9 @@
 				<tr>
 					<td>
 						<select name="category" class="form-control">
-							<option value="no">NO</option>
-							<option value="id">ID</option>
+							<option>선택</option>
+							<option value="sampleNo">NO</option>
+							<option value="sampleId">ID</option>
 						</select>
 					</td>
 					<td>
