@@ -35,7 +35,7 @@
 			UPDATE sample SET sample_pw = #{samplePw} WHERE sample_no = #{sampleNo}
 	    </update>
 	<!-- 검색 -->
-		<select id="searchSample" parameterType="map" resultType="map">
-			SELECT sample_no as sampleNo, sample_id as sampleId FROM sample WHERE #{sampleNo} = #{search}
+		<select id="searchSample" resultType="com.example.springmall.sample.vo.Sample">
+			SELECT sample_no as sampleNo, sample_id as sampleId FROM sample WHERE #{category} = #{search}
 		</select>
 </mapper>

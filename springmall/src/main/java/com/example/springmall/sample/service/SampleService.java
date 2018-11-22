@@ -32,9 +32,11 @@ public class SampleService {
 	
 	public List<Sample> searchSample(HashMap<String, Object> searchMap) {
 		System.out.println("SampleService.searchSample()");
-		if(searchMap.get("cagegory") != null && searchMap.get("search") != null) {
-			System.out.println("Yes category Yes search");
+		if(searchMap.get("category") == "") {
+			System.out.println("Please set sampleNo or sampleId");
 		}
+		System.out.println(searchMap.get("category") + "<==== 서비스 카테고리");
+		System.out.println(searchMap.get("search") + "<==== 서비스 서치");
 		return sampleMapper.searchSample(searchMap);
 	}
 	

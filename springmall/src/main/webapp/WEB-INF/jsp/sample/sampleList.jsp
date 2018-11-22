@@ -64,12 +64,12 @@
 			</c:if>
 		</div>
 		<!-- 검색 -->
-		<form action="/sample/sampleList" method="post">
+		<form action="/sample/sampleList" method="get">
 			<table style="margin:auto;text-align:center;">
 				<tr>
 					<td>
 						<select name="category" class="form-control">
-							<option>선택</option>
+							<option value="">선택</option>
 							<option value="sampleNo">NO</option>
 							<option value="sampleId">ID</option>
 						</select>
@@ -78,7 +78,7 @@
 						<input type = "text" name="search" class="form-control form-control">
 					</td>
 					<td>
-						<button type="submit" class="btn">검색</button>
+						<input type="submit" class="btn" value="검색">
 					</td>
 				</tr>
 			</table>

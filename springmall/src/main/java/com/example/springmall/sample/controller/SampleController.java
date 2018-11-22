@@ -3,9 +3,11 @@ package com.example.springmall.sample.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,16 +25,22 @@ public class SampleController {
 	private SampleService sampleService;
 	
 	@RequestMapping(value="/sample/sampleList", method=RequestMethod.POST)
-	public String searchSample(Model model, @RequestParam(value="category") Sample sample, @RequestParam(value="search") String search) {
+	public String searchSample(Model model, @RequestParam(value="category", required=false) String category, String search) {
 		System.out.println("SampleController.searchSample()");
+		
+		//request.getParameter("category");
+		//HttpServletRequest request
+		
+		System.out.println(category + "<--------------category");
+		System.out.println(search + "<--------------search");
+		
 		HashMap<String, Object> searchMap = new HashMap<String, Object>();
-        searchMap.put("sampleNo", sample.getSampleNo());
-        searchMap.put("sampleId", sample.getSampleId());
+		searchMap.put("category", category);
         searchMap.put("search", search);
+		
 		List<Sample> returnSearchSample = sampleService.searchSample(searchMap);
-/*		model.addAttribute("searchSample", returnSearchSample);
-		model.addAttribute("sampleNo", searchMap.get("sampleNo"));
-		model.addAttribute("sampleId", searchMap.get("sampleId"));*/
+		System.out.println(returnSearchSample + "<-------------returnSearchSample");
+		model.addAttribute("sampleList", returnSearchSample);
 		return "/sample/sampleList";
 	}
 	
@@ -116,7 +124,7 @@ public class SampleController {
      * @why		currentPage를 매개변수로 보내고 데이터를 매핑해와 model객체에 데이터를 넘기고 리스트를 보여주는 view로 포워드
      * @param	Model model, int currentPage
      */
-	@RequestMapping(value="/sample/sampleList", method=RequestMethod.GET)
+	@RequestMapping(value="/sample/sampleList", method={RequestMethod.GET, RequestMethod.POST})
 	public String sampleList(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage) {	// Model model = new Model();
 		System.out.println("SampleController.sampleList()");
 		HashMap<String, Object> map = new HashMap<String, Object>();
