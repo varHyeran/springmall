@@ -32,10 +32,14 @@
 	    </select>
 	<!-- 수정처리 -->
 	    <update id="updateSample" parameterType="com.example.springmall.sample.vo.Sample">
-			UPDATE sample SET sample_pw = #{samplePw} WHERE sample_no = #{sampleNo}
+			UPDATE sample SET sample_pw = #{samplePw} WHERE sample_no = #{sampleNo} 
 	    </update>
 	<!-- 검색 -->
-		<select id="searchSample" resultType="com.example.springmall.sample.vo.Sample">
-			SELECT sample_no as sampleNo, sample_id as sampleId FROM sample WHERE #{category} = #{search}
+		<select id="searchSample" parameterType="map" resultType="map">
+			SELECT sample_no as sampleNo, sample_id as sampleId FROM sample
+				<choose>
+					<when test="category == 'sample_no'">WHERE sample_no = #{search} ORDER BY sample_no LIMIT #{startRow}, #{rowPerPage}</when>
+					<when test="category == 'sample_id'">WHERE sample_id = #{search} ORDER BY sample_no LIMIT #{startRow}, #{rowPerPage}</when>
+				</choose>
 		</select>
 </mapper>

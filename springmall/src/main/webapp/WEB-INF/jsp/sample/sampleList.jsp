@@ -64,14 +64,14 @@
 			</c:if>
 		</div>
 		<!-- 검색 -->
-		<form action="/sample/sampleList" method="get">
+		<form action="/sample/searchSampleList" method="post">
 			<table style="margin:auto;text-align:center;">
 				<tr>
 					<td>
 						<select name="category" class="form-control">
 							<option value="">선택</option>
-							<option value="sampleNo">NO</option>
-							<option value="sampleId">ID</option>
+							<option value="sample_no">NO</option>
+							<option value="sample_id">ID</option>
 						</select>
 					</td>
 					<td>

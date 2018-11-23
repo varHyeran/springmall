@@ -3,11 +3,9 @@ package com.example.springmall.sample.controller;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,24 +22,32 @@ public class SampleController {
 	@Autowired
 	private SampleService sampleService;
 	
-	@RequestMapping(value="/sample/sampleList", method=RequestMethod.POST)
-	public String searchSample(Model model, @RequestParam(value="category", required=false) String category, String search) {
+	// 검색리스트
+	@RequestMapping(value="/sample/searchSampleList", method={RequestMethod.GET, RequestMethod.POST})
+	public String searchSample(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage, @RequestParam(value="category", required=false) String category, String search) {
 		System.out.println("SampleController.searchSample()");
-		
-		//request.getParameter("category");
-		//HttpServletRequest request
-		
+
 		System.out.println(category + "<--------------category");
 		System.out.println(search + "<--------------search");
 		
-		HashMap<String, Object> searchMap = new HashMap<String, Object>();
-		searchMap.put("category", category);
-        searchMap.put("search", search);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("category", category);
+		map.put("search", search);
+        
+		map.put("currentPage", currentPage);
+        List<Sample> searchSampleList = sampleService.getSampleAll(map);
+        model.addAttribute("searchSampleList", searchSampleList);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("lastPage", (int)map.get("lastPage"));
+        model.addAttribute("startPage", map.get("startPage"));
+        model.addAttribute("endPage", map.get("endPage"));
 		
-		List<Sample> returnSearchSample = sampleService.searchSample(searchMap);
+		List<Sample> returnSearchSample = sampleService.searchSample(map);
 		System.out.println(returnSearchSample + "<-------------returnSearchSample");
-		model.addAttribute("sampleList", returnSearchSample);
-		return "/sample/sampleList";
+		model.addAttribute("searchSampleList", returnSearchSample);
+		
+
+		return "/sample/searchSampleList";
 	}
 	
 	/*
@@ -124,7 +130,7 @@ public class SampleController {
      * @why		currentPage를 매개변수로 보내고 데이터를 매핑해와 model객체에 데이터를 넘기고 리스트를 보여주는 view로 포워드
      * @param	Model model, int currentPage
      */
-	@RequestMapping(value="/sample/sampleList", method={RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value="/sample/sampleList", method=RequestMethod.GET)
 	public String sampleList(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage) {	// Model model = new Model();
 		System.out.println("SampleController.sampleList()");
 		HashMap<String, Object> map = new HashMap<String, Object>();

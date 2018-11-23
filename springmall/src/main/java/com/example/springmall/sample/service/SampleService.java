@@ -28,16 +28,35 @@ public class SampleService {
 	@Autowired
 	private SampleFileMapper sampleFileMapper;
 	
-	
-	
-	public List<Sample> searchSample(HashMap<String, Object> searchMap) {
+	public List<Sample> searchSample(HashMap<String, Object> map) {
 		System.out.println("SampleService.searchSample()");
-		if(searchMap.get("category") == "") {
-			System.out.println("Please set sampleNo or sampleId");
+			/*if(searchMap.get("category") == "") {
+				System.out.println("Please set sampleNo or sampleId");
+			}*/
+		System.out.println(map.get("category") + "<==== 서비스 카테고리");
+		System.out.println(map.get("search") + "<==== 서비스 서치");
+		
+		System.out.println(sampleMapper.searchSample(map) + "<==== sampleMapper.searchSample(searchMap)");
+		// 페이징
+		int rowPerPage = 10;	// 한페이지에 행이 10개
+		int startRow = ((int)map.get("currentPage")-1)*rowPerPage;	// 1페이지는 0행부터 2페이지는 10행부터...
+		int totalCount = sampleMapper.selectSampleAllCount();	// 전체 행 갯수
+		int lastPage = totalCount/rowPerPage;	// 마지막 페이지
+		if(totalCount % rowPerPage != 0) {	// 전체행을 페이지당 행으로 나눴을 때 나머지가 0이 아니면 lastPage를 1더해준다.
+			lastPage++;
 		}
-		System.out.println(searchMap.get("category") + "<==== 서비스 카테고리");
-		System.out.println(searchMap.get("search") + "<==== 서비스 서치");
-		return sampleMapper.searchSample(searchMap);
+		int pageBlock = 5;	// 한블럭당 5페이지씩
+		int startPage = (((int)map.get("currentPage")-1)/pageBlock)*pageBlock+1;	// 시작페이지
+		int endPage = startPage + pageBlock-1;	// 끝페이지
+			if(endPage > lastPage) {
+				endPage = lastPage;
+			}
+		map.put("startPage", startPage);
+		map.put("endPage", endPage);
+		map.put("startRow", startRow);
+		map.put("rowPerPage", rowPerPage);
+		map.put("lastPage", lastPage);
+		return sampleMapper.searchSample(map);
 	}
 	
 	/*
