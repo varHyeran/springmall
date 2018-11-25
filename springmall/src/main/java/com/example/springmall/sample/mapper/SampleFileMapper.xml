@@ -23,13 +23,13 @@
 	</delete>
 	<update id="modifySampleFile" parameterType="com.example.springmall.sample.vo.SampleFile">
 		UPDATE samplefile
-	SET
-		samplefile_path=#{sampleFilePath},
-		samplefile_name=#{sampleFileName},
-		samplefile_ext=#{sampleFileExt},
-		samplefile_type=#{sampleFileType},
-		samplefile_size=#{sampleFileSize},
-		samplefile_date=now()
-	WHERE sample_no = #{sampleNo}
+			SET
+				samplefile_path=#{sampleFilePath},
+				samplefile_name=#{sampleFileName},
+				samplefile_ext=#{sampleFileExt},
+				samplefile_type=#{sampleFileType},
+				samplefile_size=#{sampleFileSize},
+				samplefile_date=now()
+			WHERE sample_no = #{sampleNo}
 	</update>
 </mapper>
